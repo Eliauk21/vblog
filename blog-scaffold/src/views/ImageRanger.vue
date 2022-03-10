@@ -77,7 +77,7 @@ export default {
       return isJPG;
     },
     toUpload(res) {
-      this.ruleForm.photosUrl = res.file; //拿到图片地址给photosUrl
+      this.ruleForm.photosUrl = res.file; //拿到图片file给photosUrl，不需要做图片预览
       //后端是通过 file来拿的
       add(this.ruleForm)
         .then((res) => {

@@ -49,6 +49,7 @@
 <script>
 import { login } from "@/api/user.js";
 
+
 export default {
   name: "Login",
   data() {
@@ -78,6 +79,10 @@ export default {
       },
     };
   },
+  mounted(){
+    this.ruleForm.username = this.$store.state.username;
+    this.ruleForm.pass = this.$store.state.password;
+  },
   methods: {
     submitForm(formName) {
       //点击登录触发事件
@@ -90,6 +95,7 @@ export default {
           }).then((res) => {
             if (res.data.errcode === 0) {
               localStorage.setItem("token", res.data.token); //将token存入本地存储
+              /* 作用：将本地存储的token存入axios请求头信息中 */
               this.$message({
                 message: "登录成功!",
                 type: "success",
@@ -115,8 +121,13 @@ export default {
         }
       });
     },
-    toRegister() {
-      this.$router.push("/register/"); //点击去往注册页面
+    toRegister() {  //如果有token，去注册页面会清空token和vuex
+      if(localStorage.getItem('token')){
+        localStorage.removeItem('token');
+        this.$store.commit('removeusername');
+        this.$store.commit('removepassword');
+      }
+      this.$router.push("/register"); //点击去往注册页面
     },
   },
 };

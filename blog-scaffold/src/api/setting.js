@@ -18,6 +18,7 @@ function update(data) { //更新个人信息接口
   });
 }
 
+
 export {
   find,
   update

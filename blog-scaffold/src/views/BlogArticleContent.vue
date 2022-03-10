@@ -39,12 +39,19 @@
             circle
             class="Artivle-comment-content-delete"
             v-show="
-              $store.state.username === articleComment[index].username
-                ? true
-                : false
+              $store.state.username === 'admin123' 
+                ? true 
+                : $store.state.username === articleComment[index].username 
+                  ? true 
+                  : false
             "
             @click="toDelete(index)"
           ></el-button>
+          <!-- v-show="
+              $store.state.username === articleComment[index].username
+                ? true
+                : false
+            " -->
           <div>
             <h4
               class="Artivle-comment-content-username"

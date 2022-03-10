@@ -7,10 +7,11 @@ let add = (req, res, next) => {
     let body = req.body;
     let articleImage = req.file;
     if (req.file) { //如果传的数据有图片
+        //将给定旧路径处的文件同步重命名为给定的新路径        意义 -> 将图片存入后端的public中
         fs.renameSync(path.join('./public/uploads', articleImage.filename), path.join('./public/uploads', articleImage.filename + '.jpg'));
         let data = {
             ...body,
-            articleImage: 'http://localhost:3000/uploads/' + articleImage.filename + '.jpg'
+            articleImage: '192.168.26.1/uploads/' + articleImage.filename + '.jpg'
         };
         ArticleModel.insertMany(data).then((info) => {
             if (info) {
@@ -38,7 +39,8 @@ let add = (req, res, next) => {
 };
 
 let find = (req, res, next) => {
-    if (req.query.articleTitle) { //根据标题查找
+    if (req.query.articleTitle) { //根据标题查找        
+        //eval() 函数会将传入的字符串当做 JavaScript 代码进行执行
         ArticleModel.find({ "articleTitle": eval('/' + req.query.articleTitle + '/') }).then((data) => { //正则里写变量要用eval
             res.send({ 'errcode': 0, 'list': data });
         }).catch(() => {
@@ -71,6 +73,7 @@ let findArticleCount = (req, res, next) => { //查找数量
 };
 
 let remove = (req, res, next) => { //删除
+    ///uploads.     这里的.指任意字符
     ArticleModel.find({ "_id": req.body._id }).then((data) => { //删除同时要把uploads里的文件也一并删除
         let filePath = path.resolve(path.join('public', data[0].articleImage.match(/\/uploads.+$/)[0])); //通过正则找到图片相对路径，用path转换为绝对路径，用fs.unlink删除文件
         fs.unlink(filePath, function (err) {
@@ -108,7 +111,7 @@ let update = (req, res, next) => { //更新
         fs.renameSync(path.join('./public/uploads', articleImage.filename), path.join('./public/uploads', articleImage.filename + '.jpg')); //删除uploads下的旧图片
         let data = {
             ...body,
-            articleImage: 'http://localhost:3000/uploads/' + articleImage.filename + '.jpg'
+            articleImage: '192.168.26.1/uploads/' + articleImage.filename + '.jpg'
         };
         ArticleModel.updateOne({ _id }, { $set: { "articleTitle": data.articleTitle, "articleImage": data.articleImage, "articleContent": data.articleContent } }).then(() => {
             res.send({ 'errcode': 0 });

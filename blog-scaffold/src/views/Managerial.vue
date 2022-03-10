@@ -17,6 +17,7 @@
             text-color="#fff"
             active-text-color="#ffd04b"
           >
+            <!-- 下次可以优化为相对路径 -->
             <el-menu-item index="/managerialHome">
               <i class="el-icon-s-home"></i>
               <span>系统首页</span>

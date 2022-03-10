@@ -7,8 +7,15 @@ import store from './store';
 import axios from 'axios';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
+import VideoPlayer from 'vue-video-player'
+import 'vue-video-player/src/custom-theme.css'
+import 'video.js/dist/video-js.css'
+
+//vue视频播放插件vue-video-player
+Vue.use(VideoPlayer)
 
 Vue.use(ElementUI);
+//markdown编辑器
 Vue.use(mavonEditor);
 
 axios.interceptors.request.use(function (config) {

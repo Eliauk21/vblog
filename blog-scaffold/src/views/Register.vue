@@ -109,7 +109,9 @@ export default {
             username: this.ruleForm.username,
             password: this.ruleForm.pass,
           }).then((res) => {
-            if (res.data.errcode === 0) {
+            if (res.data.errcode === 0) {   //注册成功，将用户名和密码存进vuex中
+              this.$store.commit('setusername', this.ruleForm.username);
+              this.$store.commit('setpassword', this.ruleForm.pass);
               this.$message({
                 message: "恭喜您注册成功!",
                 type: "success",
@@ -120,18 +122,18 @@ export default {
                 type: "error",
               });
             }
+            //清空输入框
+            this.ruleForm.username = "";
+            this.ruleForm.pass = "";
+            this.ruleForm.checkPass = "";
           });
         } else {
           return false;
         }
-        //清空输入框
-        this.ruleForm.username = "";
-        this.ruleForm.pass = "";
-        this.ruleForm.checkPass = "";
       });
     },
     toLogin() {
-      this.$router.push("/login/"); //点击去往登录页面
+      this.$router.push("/login"); //点击去往登录页面
     },
   },
 };

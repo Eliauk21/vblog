@@ -71,31 +71,43 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => { //守卫
-  if (to.meta.auth) {  //需要权限的
-    info().then((res) => {
-      if (res.data.errcode === 0) {  //token是正确的,往下走
-        store.commit('setusername', res.data.username); //将username存入vuex
-        if (to.matched[0].path === '/managerial') { //如果进入管理平台要验证是否是管理员账号
-          if (res.data.username === 'admin123') {
-            next();
+
+router.beforeEach((to, from, next)=>{   //守卫
+    if(to.meta.auth){   //需要权限的
+      info().then((res)=>{
+        if (res.data.errcode === 0){    //token是正确的,往下走
+          /* 这里可以直接使用store,不需要this */
+          store.commit('setusername', res.data.username);
+          if (to.matched[0].path === '/managerial') { //如果进入管理平台要验证是否是管理员账号
+            if (res.data.username === 'admin123') {
+              next();
+            }
+            else {
+              next('/login'); //非管理员返回登录界面
+            }
           }
           else {
-            next('/login'); //非管理员返回登录界面
+            next();
           }
+        }else{
+          next('/register');  //token不正确进入register
         }
-        else {
+      })
+    }else{  //注册登录不需要token
+      if(to.matched[0].path === '/login'){  //如果localstorage中有token，去登录页面会数据回显
+        info().then((res)=>{
+          if (res.data.errcode === 0){
+            store.commit('setusername', res.data.username);
+            store.commit('setpassword', res.data.password);
+          }
           next();
-        }
+        })
+      }else{
+        next();
       }
-      else { //token不正确进入login
-        next('/login');
-      }
-    })
-  }
-  else {  //登录注册不需要token
-    next();
-  }
+    }
 })
+
+
 
 export default router;

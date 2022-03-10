@@ -169,6 +169,7 @@ export default {
 };
 </script>
 
+
 <style>
 .Setting-label .el-form-item__label {
   /* 改变label前面文字的样式(style不能加scoped) */

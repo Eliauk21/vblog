@@ -14,7 +14,7 @@
 
       <!-- 封面 -->
       <!-- :http-request="toupload"自定义上传接口的方法  -->
-      <el-form-item label="文章封面" prop="articleImage" class="Publish-label">
+      <el-form-item label="文章封面" class="Publish-label">
         <el-upload
           class="avatar-uploader"
           action=""
@@ -131,12 +131,12 @@ export default {
     },
     toUpload(res) {
       this.imageUrl = URL.createObjectURL(res.file); //图片预览
-      this.ruleForm.articleImage = res.file; //拿到图片地址给articleImage
-      //后端是通过 file来拿的
+      this.ruleForm.articleImage = res.file; //将图片file传给后端
+      //后端解析file文件
     },
     handle(value, render) {
       console.log(value, render); //markdown里的内容
-      this.ruleForm.articleContent = render;
+      this.ruleForm.articleContent = value;
     },
   },
 };

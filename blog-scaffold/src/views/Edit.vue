@@ -8,7 +8,7 @@
           <span style="margin-left: 10px">{{ scope.row.date }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="content" label="标题"> </el-table-column>
+      <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -51,7 +51,7 @@
           </el-form-item>
           <!-- 封面 -->
           <!-- :http-request="toupload"自定义上传接口的方法  -->
-          <el-form-item label="文章封面" prop="articleImage">
+          <el-form-item label="文章封面">
             <el-upload
               class="avatar-uploader"
               action=""
@@ -74,7 +74,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="toEdit">确 定</el-button>
-      </span>
+      </span>   
     </el-dialog>
   </div>
 </template>
@@ -97,7 +97,7 @@ export default {
       },
       imageUrl: "", //图片url
       content: "", //内容
-      rules: {
+      rules: {    //失去焦点时，验证
         //标题验证
         articleTitle: [
           { required: true, message: "请输入文章标题", trigger: "blur" },
@@ -121,7 +121,7 @@ export default {
             this.tableData.push({
               //把数据放到tableData中渲染
               date: `${this.list[i].articleYear}-${this.list[i].articleMonth}-${this.list[i].articleDay}`,
-              content: this.list[i].articleTitle,
+              title: this.list[i].articleTitle,
             });
           }
         } else {
@@ -151,7 +151,8 @@ export default {
       //点击编辑按钮时触发，做回显
       this.ruleForm.articleTitle = this.list[index].articleTitle;
       this.ruleForm._id = this.list[index]._id;
-      this.imageUrl = this.list[index].articleImage;
+      this.imageUrl = this.list[index].articleImage;  
+      //回显的是后端的地址http://localhost:3000/..   
       this.content = this.list[index].articleContent;
     },
     handleDelete(index, row) {
@@ -227,15 +228,13 @@ export default {
       return isJPG;
     },
     toUpload(res) {
-      this.imageUrl = URL.createObjectURL(res.file); //图片预览
-      this.ruleForm.articleImage = res.file; //拿到图片地址给articleImage
-      //后端是通过 file来拿的
+      this.imageUrl = URL.createObjectURL(res.file); 
+      this.ruleForm.articleImage = res.file;
     },
     handle(value, render) {
-      console.log(value, render); //markdown的内容
-      this.ruleForm.articleContent = render;
+      this.ruleForm.articleContent = value;
     },
-    toEdit() {
+    toEdit() {    
       //点击编辑触发
       if (this.ruleForm.articleTitle === "") {
         //标题不能为空
@@ -244,7 +243,7 @@ export default {
           type: "warning",
         });
       } else {
-        update(this.ruleForm)
+        update(this.ruleForm)     //最好可以把更新的时间也加进去！！！！！！！待完善......
           .then((res) => {
             //发起更新ajax
             if (res.data.errcode === 0) {

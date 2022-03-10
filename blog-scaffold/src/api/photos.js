@@ -22,6 +22,7 @@ function remove(data) { //删除接口
   return axios.post('/api/photos/remove', data);
 }
 
+
 export {
   add,
   find,

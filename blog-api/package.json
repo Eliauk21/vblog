@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node-dev ./bin/www",
-    "data": "mongod --dbpath=./db"
+    "start": "concurrently \"npm run db\" \"npm run dev\"",
+    "dev": "nodemon ./bin/www",
+    "db": "mongod --dbpath=E:\\mongodb\\db"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
